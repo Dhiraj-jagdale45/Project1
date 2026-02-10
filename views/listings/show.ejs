@@ -1,0 +1,110 @@
+<% layout("layouts/biolerplate.ejs") %>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-3 col-11 offset-1">
+            <h3>
+                <%= listing.title %>:
+            </h3>
+        </div>
+        <div class="col-md-6 offset-md-3 col-10 offset-1">
+            <div class="card">
+                <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing image">
+                <div class="card-body">
+                    <p class="card-text">
+                        <i>
+                            Owned By:<%= listing_owner[0].username %>
+                        </i>
+                    </p>
+                    <p class="card-text">
+                        <%= listing.description %>
+                    </p>
+                    <p class="card-text">
+                        &#8377;<%= listing.price.toLocaleString("en-IN") %>
+                    </p>
+                    <p class="card-text">
+                        <%= listing.location %>
+                    </p>
+                    <p class="card-text">
+                        <%= listing.country %>
+                    </p>
+                </div>
+            </div>
+            <% if (currUser && currUser._id.toString()===listing_owner[0]._id.toString()) { %>
+                <div class="show-btns col-md-12">
+                    <a href="/listings/<%= listing._id %>/edit" class="btn show-btn">Edit</a>
+                    <form method="post" action="/listings/<%= listing._id %>?_method=DELETE">
+                        <button class="btn btn-dark">DELETE</button>
+                    </form>
+                </div>
+                <% } %>
+        </div>
+        <% if(currUser) { %>
+            <div class="col-md-6 offset-md-3 col-10 offset-1">
+                <hr style="border: 2px solid black;">
+                <h4>Leave a review</h4>
+                <form method="post" action="/listings/<%= listing._id %>/review" class="needs-validation mb-3"
+                    novalidate>
+                    <div class="mb-3 mt-3">
+                        <label for="rating" class="form-lable">Rating</label>
+                        <!-- <input type="range" id="rating" min="1" max="5" name="review[rating]" class="form-range"
+                            step="1"> -->
+                    </div>
+                    <fieldset class="starability-slot"> <!-- all fieldset code is copied from the staribility library -->
+                        <!-- <legend>First rating:</legend> -->
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
+                            aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                    <div class="mb-3 mt-3">
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea required name="review[comment]" id="comment" class="form-control show-comment"
+                            rows="5"></textarea>
+                        <div class="invalid-feedback mb-3 mt-3">
+                            Please Add some comments.
+                        </div>
+                    </div>
+                    <button class="btn review-btn mt-3">Submit</button>
+                </form>
+            </div>
+            <% } %>
+            <% if(listing_reviews.length > 0) { %>
+                <div class="col-md-8 offset-md-3 col-11 offset-1 mt-5">
+                    <h5>All Reviws</h5>
+                </div>
+                <div class="col-md-6 offset-md-3 col-10 offset-1 review">
+                    <% for(let i=0; i < listing_reviews.length; i++) { %>
+                        <div class="originalReview  mb-3">
+                            <p><b>@<%= reviews_owner[i].username %></b></p>
+                            <p class="starability-result" data-rating="<%= listing_reviews[i].rating %>"></p>
+                            <p>
+                                <%= listing_reviews[i].comment %>
+                            </p>
+                            <%= listing_reviews[i].createdAt.toLocaleString().split(" ")[0] %> 
+                <% if(currUser && currUser._id.toString() === reviews_owner[i]._id.toString()) { %>
+                <form class=" mt-3 mb-2" method="post"
+                                action="/listings/<%= listing._id %>/review/<%= listing_reviews[i]._id %>?_method=DELETE">
+                                <button class="btn btn-dark">Delete</button>
+                                </form>
+                                <% } %>
+                        </div>
+                        <% } %>
+                </div>
+            <% } %>
+            <p class="col-md-6 offset-md-3 col-10 offset-1"><b>Know Where You are!</b></p>
+            <div id="map" class="col-md-6 offset-md-3 col-10 offset-1"></div>
+    </div>
+    <br><br>
+<script>
+  const locationName = "<%= listing.location %>";
+</script>
+    <!-- toLocaleString -->
+    <!-- To display a price with commas according to Indian numbering standards (like 1,23,456) the correct and easiest way is to use JavaScript’s toLocaleString() method. -->

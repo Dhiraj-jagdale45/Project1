@@ -1,0 +1,107 @@
+
+<% layout("layouts/biolerplate.ejs") %>
+<div class="categories">
+    <div class="filters">
+    <a href="/listings/filter/House" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-house"></i>
+        <p>House</p>
+    </div>  
+    </a>
+    <a href="/listings/filter/Farms" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-cow"></i>
+        <p>Farms</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Beach" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+       <i class="fa-solid fa-umbrella-beach"></i>
+        <p>Beach</p>
+    </div>
+    </a>
+    <a href="/listings/filter/IconicCities" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-city"></i>
+        <p>Iconic Cities</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Rooms" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-bed"></i>
+        <p>Rooms</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Trending" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-fire"></i>
+        <p>Trending</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Pools" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-person-swimming"></i>
+        <p>Pools</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Camping" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-tent"></i>
+        <p>Camping</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Arctic" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-regular fa-snowflake"></i>
+        <p>Arctic</p>
+    </div>
+    </a>
+    <a href="/listings/filter/Others" style="text-decoration: none;  color: inherit;">
+    <div class="filter">
+        <i class="fa-solid fa-bars"></i>
+        <p>Others</p>
+    </div>
+    </a>
+</div>
+<div class="tax-toggle">
+    <div class="switch">
+    <div class="form-check form-switch form-check-reverse">
+        <label class="form-check-label" for="switchCheckDefault">Show tax</label>
+        <input class="form-check-input" type="checkbox" id="switchCheckDefault">
+    </div>
+    </div>
+</div>
+</div>
+<div class=" row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+    <% for(let listing of allListings){ %>
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+            <div class="card col">
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image" style="height: 20rem;">
+                <div class="card-body">
+                    <p class="card-text">
+                        <b>
+                            <%= listing.title %>
+                        </b>
+                        <br>
+                        &#8377;<%= listing.price.toLocaleString("en-IN") %> &nbsp;
+                        <span class="displayTax">+18% tax</span>
+                    </p>
+                </div>
+            </div>
+        </a>
+    <% } %>
+</div>
+<script>
+    let taxswitch = document.querySelector("#switchCheckDefault");
+    let taxInfo = document.querySelectorAll(".displayTax");
+    taxswitch.addEventListener("click", () =>{
+        for(info of taxInfo){
+            if(info.style.display != "inline"){
+                info.style.display = "inline";
+            }else{
+                info.style.display = "none";
+            }
+        }
+    });
+
+</script>
